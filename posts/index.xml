@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>All Posts - Omkar&#39;s Blog</title>
+        <link>https://omkar-c.github.io/posts/</link>
+        <description>All Posts | Omkar&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>omkarchorghe22@gmail.com (Omkar Chorghe)</managingEditor>
+            <webMaster>omkarchorghe22@gmail.com (Omkar Chorghe)</webMaster><lastBuildDate>Tue, 14 Mar 2023 12:37:27 &#43;0530</lastBuildDate><atom:link href="https://omkar-c.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>First_post</title>
+    <link>https://omkar-c.github.io/posts/first_post/</link>
+    <pubDate>Tue, 14 Mar 2023 12:37:27 &#43;0530</pubDate>
+    <author>Omkar Chorghe</author>
+    <guid>https://omkar-c.github.io/posts/first_post/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/first_post.jpg" referrerpolicy="no-referrer">
+            </div>My First Post Testing header 1 Testing header 2 ]]></description>
+</item>
+</channel>
+</rss>
