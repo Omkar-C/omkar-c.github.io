@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Observer Design Pattern - Omkar&#39;s Blog</title><meta name="Description" content="Omkar&#39;s Blog"><meta property="og:title" content="Observer Design Pattern" />
+<meta property="og:description" content="Observer Design Pattern in Go" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://omkar-c.github.io/posts/observer-design-pattern/" /><meta property="og:image" content="https://omkar-c.github.io/avatar.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-04-08T12:37:58+05:30" />
+<meta property="article:modified_time" content="2023-04-08T12:37:58+05:30" /><meta property="og:site_name" content="Omkar&#39;s Blog" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://omkar-c.github.io/avatar.png"/>
+
+<meta name="twitter:title" content="Observer Design Pattern"/>
+<meta name="twitter:description" content="Observer Design Pattern in Go"/>
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://omkar-c.github.io/posts/observer-design-pattern/" /><link rel="next" href="https://omkar-c.github.io/posts/books-recommendation/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Observer Design Pattern",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/omkar-c.github.io\/posts\/observer-design-pattern\/"
+        },"genre": "posts","keywords": "Programming, Design Patterns","wordcount":  660 ,
+        "url": "https:\/\/omkar-c.github.io\/posts\/observer-design-pattern\/","datePublished": "2023-04-08T12:37:58+05:30","dateModified": "2023-04-08T12:37:58+05:30","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Omkar Chorghe"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Omkar&#39;s Blog">Omkar&#39; Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Omkar&#39;s Blog">Omkar&#39; Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Observer Design Pattern</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://omkar-c.github.io/" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Omkar Chorghe</a></span>&nbsp;<span class="post-category">included in <a href="/categories/design-patterns/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Design Patterns</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="08 Apr, 2023">08 Apr, 2023</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;660 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/observer.webp"
+        data-srcset="/observer.webp, /observer.webp 1.5x, /observer.webp 2x"
+        data-sizes="auto"
+        alt="/observer.webp"
+        title="/observer.webp" width="640" height="400" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#why-learn-observer-design-pattern">Why learn Observer Design Pattern?</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#uml-diagram">UML Diagram</a></li>
+    <li><a href="#implementation">Implementation</a>
+      <ul>
+        <li><a href="#subject-interface">Subject Interface</a></li>
+        <li><a href="#observer-interface">Observer Interface</a></li>
+        <li><a href="#data-struct">Data Struct</a></li>
+        <li><a href="#lets-test-our-implementation">Let&rsquo;s test our implementation</a></li>
+        <li><a href="#output">Output</a></li>
+      </ul>
+    </li>
+    <li><a href="#github-repository">GitHub Repository</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#credits">Credits</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="observer-design-pattern">Observer Design Pattern</h1>
+<p>Recently I had the opportunity to work on a project where I had to implement the Observer Design Pattern.<br>
+Here is a simple explanation of the Observer Design Pattern with implementation in Go.</p>
+<h2 id="why-learn-observer-design-pattern">Why learn Observer Design Pattern?</h2>
+<div class="details admonition tip">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Principles of Good Software Design<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>Identify the aspects of your application that vary and separate them from what stays the same.</li>
+<li>Program to an Interface, not an Implementation.</li>
+<li>Favor Composition over Inheritance.</li>
+<li>Strive for loosely coupled designs between objects that interact.</li>
+<li>Classes should be open for extension, but closed for modification.</li>
+</ol>
+</div>
+        </div>
+    </div>
+<div class="details admonition abstract">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ul fa-fw" aria-hidden="true"></i>How does Observer Pattern follow those principles<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>Loosely coupled design - Subject and Observers are loosely coupled. Subject does not know anything about the Observers and Observers do not know anything about the Subject. They are loosely coupled.</li>
+<li>The only thing the subject knows about an observer is that it implements a certain interface (the Observer interface).</li>
+<li>Add new Observers any time.</li>
+<li>Changes to either the subject or an observer will not affect the other.</li>
+<li>Ability to evolve Subject and Observers independently.</li>
+</ol>
+</div>
+        </div>
+    </div>
+<h2 id="introduction">Introduction</h2>
+<div class="details admonition note">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>What&#39;s a Observer Pattern<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li>Observer Design Pattern is a behavioral design pattern. It defines a one-to-many dependency between objects so that when one object changes state, all of its dependents are notified and updated automatically.</li>
+<li>There are two types of objects in this pattern, the subject and the observers. The subject is the object whose state changes and the observers are the objects that are dependent on the subject.</li>
+<li>Consider a Public Github Repository, anyone can watch the repository and get notified whenever there is a commit in the repository. In this example, the repository is the subject and the watchers are the observers.</li>
+<li>The subject maintains a list of its observers and notifies them whenever there is a change in the subject.</li>
+<li>The observer interface has a single method, Update. The Update method is called by the subject whenever there is a change in the subject. The Update method is used to update the observer about the change in the subject.</li>
+</ul>
+</div>
+        </div>
+    </div>
+<hr>
+<figure><img src="/images/observer-post/observer-intro.jpg"
+         alt="Observer Intro"/>
+</figure>
+
+<hr>
+<h2 id="uml-diagram">UML Diagram</h2>
+<hr>
+<figure><img src="/images/observer-post/observer-class-uml.jpg"
+         alt="Observer Class Diagram"/>
+</figure>
+
+<hr>
+<h2 id="implementation">Implementation</h2>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Subject<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li>We will create a Subject interface and an Observer interface.</li>
+<li>The Subject interface will have two methods, Attach and Notify.</li>
+<li>The Attach method will be used to attach an observer to the subject and the Notify method will be used to notify all the observers about the change in the subject.</li>
+<li>The subject will maintain a list of observers and will notify all the observers whenever there is a change in the subject.</li>
+<li>Optionally we can define a Data interface which will be used to pass data to the observers.</li>
+</ul>
+</div>
+        </div>
+    </div>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Observer<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li>The Observer interface will have a single method, Update. The Update method will be used to update the observer about the change in the subject.</li>
+<li>The observer will implement the Update method and will be notified whenever there is a change in the subject.</li>
+</ul>
+</div>
+        </div>
+    </div>
+<h3 id="subject-interface">Subject Interface</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Subject</span> <span class="kd">interface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">Attach</span><span class="p">(</span><span class="nx">Observer</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">Notify</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">SubjectImpl</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">observers</span> <span class="p">[]</span><span class="nx">Observer</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">SubjectImpl</span><span class="p">)</span> <span class="nf">Attach</span><span class="p">(</span><span class="nx">o</span> <span class="nx">Observer</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">s</span><span class="p">.</span><span class="nx">observers</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">observers</span><span class="p">,</span> <span class="nx">o</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">SubjectImpl</span><span class="p">)</span> <span class="nf">Notify</span><span class="p">(</span><span class="nx">data</span> <span class="nx">Data</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">o</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">s</span><span class="p">.</span><span class="nx">observers</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">o</span><span class="p">.</span><span class="nf">Update</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="observer-interface">Observer Interface</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Observer</span> <span class="kd">interface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">Update</span><span class="p">(</span><span class="nx">Data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">ObserverImpl</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ID</span> <span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">o</span> <span class="o">*</span><span class="nx">ObserverImpl</span><span class="p">)</span> <span class="nf">Update</span><span class="p">(</span><span class="nx">data</span> <span class="nx">Data</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Observer&#34;</span><span class="p">,</span> <span class="nx">o</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span> <span class="s">&#34;received data&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="data-struct">Data Struct</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Data</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">name</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="lets-test-our-implementation">Let&rsquo;s test our implementation</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">subject</span> <span class="o">:=</span> <span class="nx">SubjectImpl</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">	
+</span></span><span class="line"><span class="cl">	<span class="nx">observer1</span> <span class="o">:=</span> <span class="nx">ObserverImpl</span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">observer2</span> <span class="o">:=</span> <span class="nx">ObserverImpl</span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">observer3</span> <span class="o">:=</span> <span class="nx">ObserverImpl</span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">subject</span><span class="p">.</span><span class="nf">Attach</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">observer1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">subject</span><span class="p">.</span><span class="nf">Attach</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">observer2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">subject</span><span class="p">.</span><span class="nf">Attach</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">observer3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">subject</span><span class="p">.</span><span class="nf">Notify</span><span class="p">(</span><span class="nx">Data</span><span class="p">{</span><span class="nx">name</span><span class="p">:</span> <span class="s">&#34;Data 1&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">subject</span><span class="p">.</span><span class="nf">Notify</span><span class="p">(</span><span class="nx">Data</span><span class="p">{</span><span class="nx">name</span><span class="p">:</span> <span class="s">&#34;Data 2&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="output">Output</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Observer <span class="m">1</span> received data Data <span class="m">1</span>
+</span></span><span class="line"><span class="cl">Observer <span class="m">2</span> received data Data <span class="m">1</span>
+</span></span><span class="line"><span class="cl">Observer <span class="m">3</span> received data Data <span class="m">1</span>
+</span></span><span class="line"><span class="cl">Observer <span class="m">1</span> received data Data <span class="m">2</span>
+</span></span><span class="line"><span class="cl">Observer <span class="m">2</span> received data Data <span class="m">2</span>
+</span></span><span class="line"><span class="cl">Observer <span class="m">3</span> received data Data <span class="m">2</span>
+</span></span></code></pre></div><h2 id="github-repository">GitHub Repository</h2>
+<ul>
+<li><a href="https://github.com/Omkar-C/Observer-Pattern" target="_blank" rel="noopener noreffer ">Observer Design Pattern in Go</a></li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<ul>
+<li>Now you have one more awesome design pattern in your arsenal. Have fun implementing it in your projects.</li>
+</ul>
+<h2 id="credits">Credits</h2>
+<ul>
+<li>Main Image Credit : <a href="https://refactoring.guru/design-patterns/observer" target="_blank" rel="noopener noreffer ">Observer Pattern - Refactoring Guru</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 08 Apr, 2023</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://omkar-c.github.io/posts/observer-design-pattern/" data-title="Observer Design Pattern" data-hashtags="Programming,Design Patterns"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://omkar-c.github.io/posts/observer-design-pattern/" data-hashtag="Programming"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://omkar-c.github.io/posts/observer-design-pattern/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://omkar-c.github.io/posts/observer-design-pattern/" data-title="Observer Design Pattern" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/programming/">Programming</a>,&nbsp;<a href="/tags/design-patterns/">Design Patterns</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+            <a href="/posts/books-recommendation/" class="next" rel="next" title="Books Recommendation">Books Recommendation<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://omkar-c.github.io/" target="_blank">Omkar Chorghe</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":5,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
